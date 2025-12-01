@@ -230,7 +230,7 @@
             border-radius: 2px;
         }
 
-        /* Full-Width Carousel Section */
+        /* Fixed Carousel Section */
         .carousel-section {
             position: relative;
             overflow: hidden;
@@ -247,6 +247,8 @@
         .carousel-track {
             display: flex;
             transition: transform 0.6s ease-in-out;
+            padding: 0;
+            width: 300%;
         }
 
         .feature-card {
@@ -258,13 +260,13 @@
             position: relative;
             overflow: hidden;
             z-index: 1;
-            flex: 0 0 90%;
-            margin: 0 5%;
+            width: 33.3333%;
             min-height: 500px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             text-align: center;
+            margin: 0;
         }
 
         .feature-card::before {
@@ -320,49 +322,32 @@
             margin-right: auto;
         }
 
-        .carousel-nav-hover {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            width: 15%;
-            z-index: 5;
-            opacity: 0;
-            transition: opacity 0.3s ease;
+        /* Button Navigation for Carousel */
+        .carousel-nav {
             display: flex;
-            align-items: center;
             justify-content: center;
-            cursor: pointer;
+            align-items: center;
+            margin-top: 50px;
+            gap: 30px;
         }
 
-        .carousel-nav-hover:hover {
-            opacity: 1;
-        }
-
-        .carousel-nav-hover.left {
-            left: 0;
-            background: linear-gradient(to right, rgba(248, 248, 255, 0.9), transparent);
-        }
-
-        .carousel-nav-hover.right {
-            right: 0;
-            background: linear-gradient(to left, rgba(248, 248, 255, 0.9), transparent);
-        }
-
-        .carousel-nav-hover i {
-            font-size: 3rem;
-            color: var(--dark);
+        .carousel-btn {
             background: var(--light);
-            width: 80px;
-            height: 80px;
+            color: var(--dark);
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             transition: var(--transition);
+            border: none;
+            font-size: 1.5rem;
         }
 
-        .carousel-nav-hover:hover i {
+        .carousel-btn:hover {
             background: var(--gradient-primary);
             color: white;
             transform: scale(1.1);
@@ -370,8 +355,6 @@
 
         .carousel-dots {
             display: flex;
-            justify-content: center;
-            margin-top: 50px;
             gap: 15px;
         }
 
@@ -390,6 +373,10 @@
         }
 
         /* Products Section */
+        .products-section {
+            scroll-margin-top: 80px; /* For smooth scrolling offset */
+        }
+
         .products-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -631,8 +618,7 @@
             }
             
             .feature-card {
-                flex: 0 0 85%;
-                margin: 0 7.5%;
+                width: 100%;
                 padding: 60px 30px;
                 min-height: 400px;
             }
@@ -649,14 +635,14 @@
                 font-size: 1.1rem;
             }
             
-            .carousel-nav-hover {
-                width: 20%;
+            .carousel-track {
+                width: 300%;
             }
             
-            .carousel-nav-hover i {
-                width: 60px;
-                height: 60px;
-                font-size: 2rem;
+            .carousel-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
             }
         }
     </style>
@@ -669,27 +655,27 @@
                 <div class="logo">PRODUCTO</div>
                 <nav>
                     <ul>
-                        <li><a href="#">Inicio</a></li>
-                        <li><a href="#">Productos</a></li>
-                        <li><a href="#">Características</a></li>
+                        <li><a href="#inicio">Inicio</a></li>
+                        <li><a href="#productos">Productos</a></li>
+                        <li><a href="#caracteristicas">Características</a></li>
                         <li><a href="#">Precios</a></li>
                         <li><a href="#">Nosotros</a></li>
                     </ul>
                 </nav>
                 <div class="header-actions">
-                    <a href="#" class="btn">Comenzar Ahora</a>
+                    <a href="#caracteristicas" class="btn">Comenzar Ahora</a>
                 </div>
             </div>
         </div>
     </header>
 
     <!-- Hero Section -->
-    <section class="hero">
+    <section class="hero" id="inicio">
         <div class="container">
             <div class="hero-content">
                 <h1>Eleva Tu Experiencia Digital</h1>
                 <p>Descubre nuestra línea premium de productos diseñada para transformar cómo interactúas con la tecnología. Experimenta innovación, elegancia y rendimiento excepcional.</p>
-                <a href="#" class="btn">Explorar Productos</a>
+                <a href="#productos" class="btn">Explorar Productos</a>
                 
                 <div class="hero-image">
                     <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Productos Premium">
@@ -698,13 +684,13 @@
         </div>
     </section>
 
-    <!-- Features Section with Full-Width Carousel -->
-    <section class="features carousel-section">
+    <!-- Features Section with Fixed Carousel -->
+    <section class="features carousel-section" id="caracteristicas">
         <div class="container">
             <h2 class="section-title">¿Por Qué Elegir Producto?</h2>
             <div class="carousel-container">
                 <div class="carousel-track" id="carouselTrack">
-                    <!-- Full-Width Feature Cards -->
+                    <!-- Fixed Feature Cards -->
                     <div class="feature-card">
                         <div class="feature-icon">
                             <i class="fas fa-bolt"></i>
@@ -730,25 +716,28 @@
                     </div>
                 </div>
                 
-                <!-- Hover Navigation -->
-                <div class="carousel-nav-hover left" id="carouselLeft">
-                    <i class="fas fa-chevron-left"></i>
-                </div>
-                <div class="carousel-nav-hover right" id="carouselRight">
-                    <i class="fas fa-chevron-right"></i>
-                </div>
-                
-                <div class="carousel-dots" id="carouselDots">
-                    <div class="carousel-dot active" data-slide="0"></div>
-                    <div class="carousel-dot" data-slide="1"></div>
-                    <div class="carousel-dot" data-slide="2"></div>
+                <!-- Button Navigation -->
+                <div class="carousel-nav">
+                    <button class="carousel-btn" id="prevBtn">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    
+                    <div class="carousel-dots" id="carouselDots">
+                        <div class="carousel-dot active" data-slide="0"></div>
+                        <div class="carousel-dot" data-slide="1"></div>
+                        <div class="carousel-dot" data-slide="2"></div>
+                    </div>
+                    
+                    <button class="carousel-btn" id="nextBtn">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Products Section -->
-    <section class="products">
+    <section class="products products-section" id="productos">
         <div class="container">
             <h2 class="section-title">Productos Destacados</h2>
             <div class="products-grid">
@@ -817,7 +806,7 @@
         <div class="container">
             <h2>¿Listo para Transformar Tu Experiencia?</h2>
             <p>Únete a miles de clientes satisfechos que ya han descubierto la diferencia de Producto.</p>
-            <a href="#" class="btn">Comenzar Ahora</a>
+            <a href="#caracteristicas" class="btn">Comenzar Ahora</a>
         </div>
     </section>
 
@@ -838,11 +827,11 @@
                 <div class="footer-column">
                     <h3>Productos</h3>
                     <ul class="footer-links">
-                        <li><a href="#">Auriculares</a></li>
-                        <li><a href="#">Smartwatches</a></li>
-                        <li><a href="#">Altavoces</a></li>
-                        <li><a href="#">Accesorios</a></li>
-                        <li><a href="#">Nuevos Lanzamientos</a></li>
+                        <li><a href="#productos">Auriculares</a></li>
+                        <li><a href="#productos">Smartwatches</a></li>
+                        <li><a href="#productos">Altavoces</a></li>
+                        <li><a href="#productos">Accesorios</a></li>
+                        <li><a href="#productos">Nuevos Lanzamientos</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
@@ -894,55 +883,108 @@
             });
         });
 
-        // Full-Width Carousel functionality
+        // Fixed Carousel functionality
         const carouselTrack = document.getElementById('carouselTrack');
-        const carouselLeft = document.getElementById('carouselLeft');
-        const carouselRight = document.getElementById('carouselRight');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
         const carouselDots = document.getElementById('carouselDots');
         
         const cards = Array.from(carouselTrack.children);
         const dots = Array.from(carouselDots.children);
-        const cardWidth = cards[0].getBoundingClientRect().width;
         
-        let currentPosition = 0;
-        let currentCard = 0;
+        let currentSlide = 0;
+        const totalSlides = cards.length;
         
-        // Function to move carousel
-        const moveCarousel = (direction) => {
-            if (direction === 'right') {
-                currentCard = (currentCard + 1) % cards.length;
-            } else {
-                currentCard = (currentCard - 1 + cards.length) % cards.length;
-            }
+        // Function to update carousel position
+        const updateCarousel = () => {
+            // Reset track width for proper alignment
+            carouselTrack.style.width = `${100 * totalSlides}%`;
             
-            currentPosition = -currentCard * cardWidth;
-            carouselTrack.style.transform = `translateX(${currentPosition}px)`;
+            // Set each card width
+            cards.forEach(card => {
+                card.style.width = `${100 / totalSlides}%`;
+            });
+            
+            // Move track to current slide
+            carouselTrack.style.transform = `translateX(-${currentSlide * (100 / totalSlides)}%)`;
             
             // Update active dot
-            dots.forEach(dot => dot.classList.remove('active'));
-            dots[currentCard].classList.add('active');
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
         };
         
-        // Hover navigation
-        carouselLeft.addEventListener('click', () => moveCarousel('left'));
-        carouselRight.addEventListener('click', () => moveCarousel('right'));
+        // Initialize carousel
+        updateCarousel();
+        
+        // Next button click
+        nextBtn.addEventListener('click', () => {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateCarousel();
+        });
+        
+        // Previous button click
+        prevBtn.addEventListener('click', () => {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateCarousel();
+        });
         
         // Dot navigation
         dots.forEach(dot => {
             dot.addEventListener('click', () => {
-                currentCard = parseInt(dot.dataset.slide);
-                currentPosition = -currentCard * cardWidth;
-                carouselTrack.style.transform = `translateX(${currentPosition}px)`;
-                
-                dots.forEach(d => d.classList.remove('active'));
-                dot.classList.add('active');
+                currentSlide = parseInt(dot.dataset.slide);
+                updateCarousel();
             });
         });
         
-        // Auto-advance carousel
+        // Auto-advance carousel (optional)
         setInterval(() => {
-            moveCarousel('right');
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateCarousel();
         }, 6000);
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    // Calculate offset for fixed header
+                    const headerHeight = document.getElementById('header').offsetHeight;
+                    const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+                    
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Make buttons work with smooth scrolling
+        document.querySelectorAll('.btn[href^="#"]').forEach(button => {
+            button.addEventListener('click', function(e) {
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    e.preventDefault();
+                    
+                    const headerHeight = document.getElementById('header').offsetHeight;
+                    const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+                    
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
     </script>
 </body>
 </html>
