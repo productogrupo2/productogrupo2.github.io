@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Innovación en Tradición | Maquinaria para Tortillas y Antojitos</title>
+    <title>KITCH-CRAFTER | Press&Maiz - Revolución en Tortillas</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -109,6 +110,7 @@
         .header-actions {
             display: flex;
             align-items: center;
+            gap: 20px;
         }
 
         .btn {
@@ -128,6 +130,241 @@
         .btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 6px 20px rgba(220, 39, 67, 0.4);
+        }
+
+        .btn-cart {
+            position: relative;
+            background: #28a745;
+            padding: 10px 20px;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #dc3545;
+            color: white;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Cart Modal Styles */
+        .cart-modal {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 380px;
+            height: 100%;
+            background: white;
+            box-shadow: -5px 0 25px rgba(0, 0, 0, 0.15);
+            z-index: 2000;
+            transition: var(--transition);
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .cart-modal.active {
+            right: 0;
+        }
+
+        .cart-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 1999;
+        }
+
+        .cart-overlay.active {
+            display: block;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .cart-header h3 {
+            font-size: 1.5rem;
+            color: var(--dark);
+        }
+
+        .close-cart {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #666;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .close-cart:hover {
+            color: #dc2743;
+        }
+
+        .cart-items {
+            margin-bottom: 30px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item-info h4 {
+            font-size: 1rem;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+
+        .cart-item-info p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .cart-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cart-item-controls button {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .cart-item-controls button:hover {
+            background: #e9ecef;
+        }
+
+        .cart-item-quantity {
+            font-weight: 600;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .cart-item-price {
+            font-weight: 600;
+            color: var(--dark);
+            min-width: 80px;
+            text-align: right;
+        }
+
+        .cart-total {
+            padding: 20px 0;
+            border-top: 2px solid #eee;
+            border-bottom: 2px solid #eee;
+            margin-bottom: 20px;
+        }
+
+        .cart-total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .cart-total-row.total {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .cart-empty {
+            text-align: center;
+            padding: 40px 0;
+            color: #666;
+        }
+
+        .cart-empty i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #ddd;
+        }
+
+        /* WhatsApp Chat Widget */
+        .chat-widget {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+
+        .chat-button {
+            background: #25D366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 5px 20px rgba(37, 211, 102, 0.3);
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+        }
+
+        .chat-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 30px;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 2000;
+            transform: translateX(400px);
+            transition: var(--transition);
+        }
+
+        .notification.active {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            border-left: 4px solid #28a745;
+        }
+
+        .notification.success i {
+            color: #28a745;
+        }
+
+        .notification.error {
+            border-left: 4px solid #dc3545;
+        }
+
+        .notification.error i {
+            color: #dc3545;
         }
 
         /* Hero Section */
@@ -669,6 +906,22 @@
             .hero-image img {
                 max-height: 300px;
             }
+            
+            .cart-modal {
+                width: 100%;
+                right: -100%;
+            }
+            
+            .chat-widget {
+                bottom: 20px;
+                right: 20px;
+            }
+            
+            .chat-button {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
@@ -677,33 +930,95 @@
     <header id="header">
         <div class="container">
             <div class="header-content">
-                <div class="logo">TORTITECH</div>
+                <div class="logo">KITCH-CRAFTER</div>
                 <nav>
                     <ul>
                         <li><a href="#inicio">Inicio</a></li>
-                        <li><a href="#maquinas">Máquinas</a></li>
+                        <li><a href="#maquinas">Press&Maiz</a></li>
                         <li><a href="#beneficios">Beneficios</a></li>
                         <li><a href="#contacto">Contacto</a></li>
                         <li><a href="#nosotros">Nosotros</a></li>
                     </ul>
                 </nav>
                 <div class="header-actions">
-                    <a href="#beneficios" class="btn">Solicitar Demo</a>
+                    <button class="btn btn-cart" id="cartButton">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count" id="cartCount">0</span>
+                    </button>
+                    <a href="#maquinas" class="btn">Ver Máquinas</a>
                 </div>
             </div>
         </div>
     </header>
 
+    <!-- Cart Modal -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-header">
+            <h3>🛒 Tu Carrito</h3>
+            <button class="close-cart" id="closeCart">&times;</button>
+        </div>
+        
+        <div class="cart-items" id="cartItems">
+            <!-- Cart items will be inserted here -->
+            <div class="cart-empty" id="emptyCart">
+                <i class="fas fa-shopping-cart"></i>
+                <p>Tu carrito está vacío</p>
+                <p style="font-size: 0.9rem; margin-top: 10px;">Agrega productos para continuar</p>
+            </div>
+        </div>
+        
+        <div class="cart-total" id="cartTotal" style="display: none;">
+            <div class="cart-total-row">
+                <span>Subtotal:</span>
+                <span id="subtotal">Q0.00</span>
+            </div>
+            <div class="cart-total-row">
+                <span>Envío:</span>
+                <span id="shipping">Q250.00</span>
+            </div>
+            <div class="cart-total-row total">
+                <span>Total:</span>
+                <span id="total">Q0.00</span>
+            </div>
+        </div>
+        
+        <div style="display: none;" id="cartActions">
+            <button class="btn" style="width: 100%; margin-bottom: 10px;" id="clearCart">
+                <i class="fas fa-trash"></i> Vaciar Carrito
+            </button>
+            <button class="btn btn-cart" style="width: 100%;" id="checkoutBtn">
+                <i class="fas fa-check"></i> Proceder al Pago
+            </button>
+        </div>
+    </div>
+
+    <!-- WhatsApp Chat Widget -->
+    <div class="chat-widget">
+        <button class="chat-button" id="whatsappButton">
+            <i class="fab fa-whatsapp"></i>
+        </button>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <div>
+            <strong id="notificationTitle">Producto agregado</strong>
+            <p id="notificationMessage">El producto se agregó al carrito</p>
+        </div>
+    </div>
+
     <!-- Hero Section -->
     <section class="hero" id="inicio">
         <div class="container">
             <div class="hero-content">
-                <h1>Reinventando la Tradición del Comal</h1>
-                <p>Somos una startup guatemalteca que está transformando la forma en que se hacen tortillas y antojitos. Nuestra tecnología libera a cocineras y pequeños negocios del trabajo manual repetitivo, garantizando calidad y consistencia en cada pieza.</p>
-                <a href="#maquinas" class="btn">Conocer Nuestras Máquinas</a>
+                <h1>Press&Maiz by KITCH-CRAFTER</h1>
+                <p>Revolucionamos la producción de tortillas con tecnología guatemalteca de precisión. Máquinas industriales que garantizan calidad, consistencia y productividad máxima.</p>
+                <a href="#maquinas" class="btn">Conoce Press&Maiz</a>
                 
                 <div class="hero-image">
-                    <img src="/images/lineup.png" alt="Línea completa de máquinas para tortillas">
+                    <img src="/images/lineup.png" alt="Línea completa Press&Maiz">
                 </div>
             </div>
         </div>
@@ -712,7 +1027,7 @@
     <!-- Benefits Section with Carousel -->
     <section class="features carousel-section" id="beneficios">
         <div class="container">
-            <h2 class="section-title">¿Por Qué Nuestras Máquinas?</h2>
+            <h2 class="section-title">Ventajas Press&Maiz</h2>
             <div class="carousel-container">
                 <div class="carousel-track" id="carouselTrack">
                     <!-- Benefit Card 1 -->
@@ -720,8 +1035,8 @@
                         <div class="feature-icon">
                             <i class="fas fa-bolt"></i>
                         </div>
-                        <h3>Productividad Multiplicada</h3>
-                        <p>Nuestro sistema de placas calentadas duales cocina ambos lados a la vez, produciendo tortillas perfectas en segundos. Libera a tus cocineras del trabajo manual repetitivo y aumenta tu capacidad de producción exponencialmente.</p>
+                        <h3>Productividad ×10</h3>
+                        <p>Sistema de placas duales que cocina ambos lados simultáneamente. Produce hasta 700 tortillas/hora con consistencia perfecta.</p>
                     </div>
                     
                     <!-- Benefit Card 2 -->
@@ -729,8 +1044,8 @@
                         <div class="feature-icon">
                             <i class="fas fa-shield-alt"></i>
                         </div>
-                        <h3>Calidad Impecable y Constante</h3>
-                        <p>Garantizamos uniformidad en cada pieza: mismo grosor, mismo punto de cocción, misma calidad. Termina con la variabilidad del comal tradicional y ofrece a tus clientes la consistencia que merecen en cada bocado.</p>
+                        <h3>Calidad Garantizada</h3>
+                        <p>Grosor uniforme, cocción perfecta en cada pieza. Elimina la variabilidad del comal tradicional con tecnología de precisión.</p>
                     </div>
                     
                     <!-- Benefit Card 3 -->
@@ -738,8 +1053,8 @@
                         <div class="feature-icon">
                             <i class="fas fa-palette"></i>
                         </div>
-                        <h3>Versatilidad sin Precedentes</h3>
-                        <p>Con nuestro sistema de placas intercambiables, una sola máquina produce tortillas, pupusas formadas o sopes. Adapta tu producción según la demanda sin necesidad de equipos adicionales o espacio extra.</p>
+                        <h3>Sistema Modular</h3>
+                        <p>Placas intercambiables para tortillas, pupusas y sopes. Una máquina, múltiples productos con cambio rápido de configuración.</p>
                     </div>
                 </div>
                 
@@ -763,262 +1078,98 @@
         </div>
     </section>
 
-    <!-- Machines Section -->
+    <!-- Products Section -->
     <section class="products products-section" id="maquinas">
         <div class="container">
-            <h2 class="section-title">Nuestra Línea de Máquinas</h2>
+            <h2 class="section-title">Modelos Press&Maiz</h2>
             <div class="products-grid">
-                <!-- Machine 1 - La Individual -->
+                <!-- Machine 1 - Press&Maiz Individual -->
                 <div class="product-card">
                     <div class="product-image">
-                        <img src="/images/individual.png" alt="Máquina La Individual">
-                        <div class="product-badge">Para Pequeños Negocios</div>
+                        <img src="/images/individual.png" alt="Press&Maiz Individual">
+                        <div class="product-badge">Startup</div>
                     </div>
                     <div class="product-content">
-                        <h3>La Individual</h3>
-                        <p>Ideal para emprendedores y pequeños restaurantes. Máquina compacta que produce tortillas perfectas una por una con precisión milimétrica.</p>
-                        <div class="product-price">Desde Q8,500</div>
-                        <a href="#contacto" class="btn">Solicitar Información</a>
+                        <h3>Press&Maiz Individual</h3>
+                        <p>Ideal para emprendedores y pequeños negocios. Compacta, eficiente y fácil de operar.</p>
+                        <div class="product-price">Q8,500</div>
+                        <button class="btn btn-cart add-to-cart" data-id="1" data-name="Press&Maiz Individual" data-price="8500">
+                            <i class="fas fa-cart-plus"></i> Agregar al Carrito
+                        </button>
                         <ul class="product-features">
-                            <li>Producción: 120-180 tortillas/hora</li>
-                            <li>Grosor ajustable de 1-3 mm</li>
-                            <li>Diámetro de tortilla: 10-15 cm</li>
-                            <li>Consumo energético eficiente</li>
-                            <li>Ideal para inicio de negocios</li>
+                            <li>120-180 tortillas/hora</li>
+                            <li>Grosor ajustable 1-3mm</li>
+                            <li>Consumo: 1.5kW/h</li>
+                            <li>Garantía 12 meses</li>
+                            <li>Incluye placa estándar</li>
                         </ul>
                     </div>
                 </div>
                 
-                <!-- Machine 2 - La Doble -->
+                <!-- Machine 2 - Press&Maiz Doble -->
                 <div class="product-card">
                     <div class="product-image">
-                        <img src="/images/lineup.png" alt="Máquina La Doble">
-                        <div class="product-badge">Más Popular</div>
+                        <img src="/images/lineup.png" alt="Press&Maiz Doble">
+                        <div class="product-badge">Más Vendido</div>
                     </div>
                     <div class="product-content">
-                        <h3>La Doble</h3>
-                        <p>Para restaurantes medianos y tortillerías. Sistema dual que duplica la productividad manteniendo la calidad artesanal.</p>
-                        <div class="product-price">Desde Q15,000</div>
-                        <a href="#contacto" class="btn">Solicitar Información</a>
+                        <h3>Press&Maiz Doble</h3>
+                        <p>Para restaurantes y tortillerías medianas. Doble productividad, misma calidad.</p>
+                        <div class="product-price">Q15,000</div>
+                        <button class="btn btn-cart add-to-cart" data-id="2" data-name="Press&Maiz Doble" data-price="15000">
+                            <i class="fas fa-cart-plus"></i> Agregar al Carrito
+                        </button>
                         <ul class="product-features">
-                            <li>Producción: 250-350 tortillas/hora</li>
-                            <li>Dos placas de cocción simultánea</li>
-                            <li>Sistema de regulación de temperatura</li>
-                            <li>Mayor capacidad de masa</li>
-                            <li>Perfecta para crecimiento empresarial</li>
+                            <li>250-350 tortillas/hora</li>
+                            <li>Dos placas simultáneas</li>
+                            <li>Consumo: 2.8kW/h</li>
+                            <li>Garantía 18 meses</li>
+                            <li>Control digital</li>
                         </ul>
                     </div>
                 </div>
                 
-                <!-- Machine 3 - La Cuádruple -->
+                <!-- Machine 3 - Press&Maiz Cuádruple -->
                 <div class="product-card">
                     <div class="product-image">
-                        <img src="/images/lineup.png" alt="Máquina La Cuádruple">
-                        <div class="product-badge">Producción Industrial</div>
+                        <img src="/images/lineup.png" alt="Press&Maiz Cuádruple">
+                        <div class="product-badge">Industrial</div>
                     </div>
                     <div class="product-content">
-                        <h3>La Cuádruple</h3>
-                        <p>Para grandes restaurantes, comedores industriales y distribución. Máxima productividad con calidad garantizada.</p>
-                        <div class="product-price">Desde Q28,000</div>
-                        <a href="#contacto" class="btn">Solicitar Información</a>
+                        <h3>Press&Maiz Cuádruple</h3>
+                        <p>Para producción a gran escala. Máxima eficiencia y automatización.</p>
+                        <div class="product-price">Q28,000</div>
+                        <button class="btn btn-cart add-to-cart" data-id="3" data-name="Press&Maiz Cuádruple" data-price="28000">
+                            <i class="fas fa-cart-plus"></i> Agregar al Carrito
+                        </button>
                         <ul class="product-features">
-                            <li>Producción: 500-700 tortillas/hora</li>
-                            <li>Cuatro placas de cocción simultánea</li>
-                            <li>Sistema automatizado de alimentación</li>
-                            <li>Control digital de parámetros</li>
-                            <li>Para negocios en expansión</li>
+                            <li>500-700 tortillas/hora</li>
+                            <li>Cuatro placas simultáneas</li>
+                            <li>Consumo: 4.5kW/h</li>
+                            <li>Garantía 24 meses</li>
+                            <li>Sistema automatizado</li>
                         </ul>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- Value Proposition Section -->
-    <section class="cta">
-        <div class="container">
-            <h2>Transformamos el Arte Manual en Proceso Controlado</h2>
-            <p>No vendemos solo máquinas. Vendemos consistencia, eficiencia y crecimiento. Liberamos a nuestros clientes del trabajo repetitivo para que se enfoquen en lo que más importa: servir comida deliciosa y hacer crecer su negocio.</p>
-            <a href="#contacto" class="btn">Agendar Una Demo Gratuita</a>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer id="contacto">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h3>Innovación en Tradición</h3>
-                    <p>Startup guatemalteca dedicada a reinventar la producción de tortillas y antojitos mediante ingeniería de precisión que honra nuestra tradición culinaria.</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-whatsapp"></i></a>
-                        <a href="#"><i class="fas fa-envelope"></i></a>
+            
+            <!-- Accessories Section -->
+            <div style="margin-top: 60px;">
+                <h3 style="text-align: center; margin-bottom: 30px; color: var(--dark);">Accesorios y Placas</h3>
+                <div class="products-grid">
+                    <div class="product-card">
+                        <div class="product-content">
+                            <h3>Placa para Pupusas</h3>
+                            <p>Molde especial para pupusas formadas de 10cm.</p>
+                            <div class="product-price">Q1,200</div>
+                            <button class="btn add-to-cart" data-id="4" data-name="Placa para Pupusas" data-price="1200">
+                                <i class="fas fa-cart-plus"></i> Agregar
+                            </button>
+                        </div>
                     </div>
-                </div>
-                <div class="footer-column">
-                    <h3>Nuestras Máquinas</h3>
-                    <ul class="footer-links">
-                        <li><a href="#maquinas">La Individual</a></li>
-                        <li><a href="#maquinas">La Doble</a></li>
-                        <li><a href="#maquinas">La Cuádruple</a></li>
-                        <li><a href="#maquinas">Placas Intercambiables</a></li>
-                        <li><a href="#maquinas">Accesorios y Repuestos</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Soporte y Servicio</h3>
-                    <ul class="footer-links">
-                        <li><a href="#contacto">Demostraciones</a></li>
-                        <li><a href="#contacto">Capacitación</a></li>
-                        <li><a href="#contacto">Mantenimiento</a></li>
-                        <li><a href="#contacto">Garantía</a></li>
-                        <li><a href="#contacto">Financiamiento</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column" id="nosotros">
-                    <h3>Conócenos</h3>
-                    <ul class="footer-links">
-                        <li><a href="#nosotros">Nuestra Misión</a></li>
-                        <li><a href="#nosotros">Nuestro Equipo</a></li>
-                        <li><a href="#nosotros">Casos de Éxito</a></li>
-                        <li><a href="#contacto">Trabaja con Nosotros</a></li>
-                        <li><a href="#contacto">Contacto Directo</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="copyright">
-                <p>&copy; 2023 Startup Guatemalteca de Maquinaria para Tortillas. Innovando desde Guatemala para el mundo.</p>
-                <p style="margin-top: 10px; font-size: 0.8rem;">Honramos la tradición, impulsamos el progreso.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        // Header scroll effect
-        window.addEventListener('scroll', function() {
-            const header = document.getElementById('header');
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-        });
-
-        // Product card expansion
-        document.querySelectorAll('.product-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.style.zIndex = '10';
-            });
-            
-            card.addEventListener('mouseleave', function() {
-                this.style.zIndex = '1';
-            });
-        });
-
-        // Fixed Carousel functionality
-        const carouselTrack = document.getElementById('carouselTrack');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        const carouselDots = document.getElementById('carouselDots');
-        
-        const cards = Array.from(carouselTrack.children);
-        const dots = Array.from(carouselDots.children);
-        
-        let currentSlide = 0;
-        const totalSlides = cards.length;
-        
-        // Function to update carousel position
-        const updateCarousel = () => {
-            // Reset track width for proper alignment
-            carouselTrack.style.width = `${100 * totalSlides}%`;
-            
-            // Set each card width
-            cards.forEach(card => {
-                card.style.width = `${100 / totalSlides}%`;
-            });
-            
-            // Move track to current slide
-            carouselTrack.style.transform = `translateX(-${currentSlide * (100 / totalSlides)}%)`;
-            
-            // Update active dot
-            dots.forEach((dot, index) => {
-                dot.classList.toggle('active', index === currentSlide);
-            });
-        };
-        
-        // Initialize carousel
-        updateCarousel();
-        
-        // Next button click
-        nextBtn.addEventListener('click', () => {
-            currentSlide = (currentSlide + 1) % totalSlides;
-            updateCarousel();
-        });
-        
-        // Previous button click
-        prevBtn.addEventListener('click', () => {
-            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
-            updateCarousel();
-        });
-        
-        // Dot navigation
-        dots.forEach(dot => {
-            dot.addEventListener('click', () => {
-                currentSlide = parseInt(dot.dataset.slide);
-                updateCarousel();
-            });
-        });
-        
-        // Auto-advance carousel (optional)
-        setInterval(() => {
-            currentSlide = (currentSlide + 1) % totalSlides;
-            updateCarousel();
-        }, 6000);
-        
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                const targetId = this.getAttribute('href');
-                if (targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    // Calculate offset for fixed header
-                    const headerHeight = document.getElementById('header').offsetHeight;
-                    const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
                     
-                    window.scrollTo({
-                        top: targetPosition,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-        
-        // Make buttons work with smooth scrolling
-        document.querySelectorAll('.btn[href^="#"]').forEach(button => {
-            button.addEventListener('click', function(e) {
-                const targetId = this.getAttribute('href');
-                if (targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    e.preventDefault();
-                    
-                    const headerHeight = document.getElementById('header').offsetHeight;
-                    const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
-                    
-                    window.scrollTo({
-                        top: targetPosition,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-    </script>
-</body>
-</html>
+                    <div class="product-card">
+                        <div class="product-content">
+                            <h3>Placa para Sopes</h3>
+                            <p>Molde para sopes con bordes perfectos.</p>
+                            <div class="product-price
