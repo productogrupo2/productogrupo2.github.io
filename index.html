@@ -153,6 +153,16 @@
             justify-content: center;
         }
 
+        .btn-whatsapp {
+            background: #25D366;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-whatsapp:hover {
+            background: #1da851;
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+        }
+
         /* Cart Modal Styles */
         .cart-modal {
             position: fixed;
@@ -702,6 +712,14 @@
             margin-bottom: 15px;
         }
 
+        .product-price span {
+            font-size: 0.9rem;
+            color: #666;
+            display: block;
+            margin-top: 5px;
+            font-weight: normal;
+        }
+
         .product-features {
             list-style: none;
             margin-top: 20px;
@@ -728,6 +746,77 @@
             left: 0;
             color: #dc2743;
             font-weight: bold;
+        }
+
+        /* Finance Badge */
+        .finance-badge {
+            display: inline-block;
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        /* Shipping Info */
+        .shipping-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+            border: 2px dashed #dee2e6;
+        }
+
+        .shipping-info h4 {
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        .shipping-info p {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        /* Target Audience Section */
+        .audience-section {
+            background: white;
+            border-radius: 20px;
+            padding: 60px;
+            margin: 60px 0;
+            box-shadow: var(--card-shadow);
+        }
+
+        .audience-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .audience-card {
+            text-align: center;
+            padding: 30px;
+            border-radius: 15px;
+            background: var(--ghost-white);
+            transition: var(--transition);
+        }
+
+        .audience-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .audience-card i {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
         /* CTA Section */
@@ -922,6 +1011,10 @@
                 height: 50px;
                 font-size: 1.5rem;
             }
+            
+            .audience-section {
+                padding: 40px 20px;
+            }
         }
     </style>
 </head>
@@ -936,8 +1029,8 @@
                         <li><a href="#inicio">Inicio</a></li>
                         <li><a href="#maquinas">Press&Maiz</a></li>
                         <li><a href="#beneficios">Beneficios</a></li>
+                        <li><a href="#publico">¿Para Quién?</a></li>
                         <li><a href="#contacto">Contacto</a></li>
-                        <li><a href="#nosotros">Nosotros</a></li>
                     </ul>
                 </nav>
                 <div class="header-actions">
@@ -945,7 +1038,9 @@
                         <i class="fas fa-shopping-cart"></i>
                         <span class="cart-count" id="cartCount">0</span>
                     </button>
-                    <a href="#maquinas" class="btn">Ver Máquinas</a>
+                    <a href="https://wa.me/50212345678?text=Hola%20KITCH-CRAFTER,%20quiero%20información%20sobre%20Press&Maiz" class="btn btn-whatsapp" target="_blank">
+                        <i class="fab fa-whatsapp"></i> WhatsApp
+                    </a>
                 </div>
             </div>
         </div>
@@ -960,7 +1055,6 @@
         </div>
         
         <div class="cart-items" id="cartItems">
-            <!-- Cart items will be inserted here -->
             <div class="cart-empty" id="emptyCart">
                 <i class="fas fa-shopping-cart"></i>
                 <p>Tu carrito está vacío</p>
@@ -975,7 +1069,7 @@
             </div>
             <div class="cart-total-row">
                 <span>Envío:</span>
-                <span id="shipping">Q250.00</span>
+                <span id="shipping">Q0.00</span>
             </div>
             <div class="cart-total-row total">
                 <span>Total:</span>
@@ -984,11 +1078,21 @@
         </div>
         
         <div style="display: none;" id="cartActions">
+            <div class="shipping-info" style="margin: 20px 0;">
+                <h4>📦 Envío Incluido</h4>
+                <p><strong>Guatemala y Sacatepéquez:</strong> GRATIS</p>
+                <p><strong>Interior del país:</strong> Q30 adicionales</p>
+            </div>
+            
+            <div class="finance-badge" style="width: 100%; text-align: center; margin-bottom: 15px;">
+                💳 Financiamiento disponible en cuotas
+            </div>
+            
             <button class="btn" style="width: 100%; margin-bottom: 10px;" id="clearCart">
                 <i class="fas fa-trash"></i> Vaciar Carrito
             </button>
             <button class="btn btn-cart" style="width: 100%;" id="checkoutBtn">
-                <i class="fas fa-check"></i> Proceder al Pago
+                <i class="fas fa-check"></i> Finalizar Compra
             </button>
         </div>
     </div>
@@ -1014,8 +1118,8 @@
         <div class="container">
             <div class="hero-content">
                 <h1>Press&Maiz by KITCH-CRAFTER</h1>
-                <p>Revolucionamos la producción de tortillas con tecnología guatemalteca de precisión. Máquinas industriales que garantizan calidad, consistencia y productividad máxima.</p>
-                <a href="#maquinas" class="btn">Conoce Press&Maiz</a>
+                <p>La revolución guatemalteca en producción de tortillas. Máquinas de precisión para hogares y emprendedores. Calidad industrial a precio accesible.</p>
+                <a href="#maquinas" class="btn">Ver Modelos</a>
                 
                 <div class="hero-image">
                     <img src="/images/lineup.png" alt="Línea completa Press&Maiz">
@@ -1027,7 +1131,7 @@
     <!-- Benefits Section with Carousel -->
     <section class="features carousel-section" id="beneficios">
         <div class="container">
-            <h2 class="section-title">Ventajas Press&Maiz</h2>
+            <h2 class="section-title">Tecnología Press&Maiz</h2>
             <div class="carousel-container">
                 <div class="carousel-track" id="carouselTrack">
                     <!-- Benefit Card 1 -->
@@ -1035,8 +1139,8 @@
                         <div class="feature-icon">
                             <i class="fas fa-bolt"></i>
                         </div>
-                        <h3>Productividad ×10</h3>
-                        <p>Sistema de placas duales que cocina ambos lados simultáneamente. Produce hasta 700 tortillas/hora con consistencia perfecta.</p>
+                        <h3>Calentamiento Rápido</h3>
+                        <p>Preparación en solo 3-5 minutos. Temperatura ajustable de 120°C a 230°C para diferentes tipos de masa y preferencias de cocción.</p>
                     </div>
                     
                     <!-- Benefit Card 2 -->
@@ -1044,8 +1148,8 @@
                         <div class="feature-icon">
                             <i class="fas fa-shield-alt"></i>
                         </div>
-                        <h3>Calidad Garantizada</h3>
-                        <p>Grosor uniforme, cocción perfecta en cada pieza. Elimina la variabilidad del comal tradicional con tecnología de precisión.</p>
+                        <h3>Precisión Guatemalteca</h3>
+                        <p>Diseñadas y fabricadas en Guatemala para las necesidades locales. Garantía de 12-24 meses según modelo.</p>
                     </div>
                     
                     <!-- Benefit Card 3 -->
@@ -1053,8 +1157,8 @@
                         <div class="feature-icon">
                             <i class="fas fa-palette"></i>
                         </div>
-                        <h3>Sistema Modular</h3>
-                        <p>Placas intercambiables para tortillas, pupusas y sopes. Una máquina, múltiples productos con cambio rápido de configuración.</p>
+                        <h3>Versatilidad Total</h3>
+                        <p>Placas intercambiables para tortillas, pupusas y tostadas. Adapta tu producción según la demanda del mercado.</p>
                     </div>
                 </div>
                 
@@ -1082,94 +1186,38 @@
     <section class="products products-section" id="maquinas">
         <div class="container">
             <h2 class="section-title">Modelos Press&Maiz</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 40px; max-width: 800px; margin-left: auto; margin-right: auto;">
+                Cada modelo incluye: Calentamiento rápido (3-5 min), temperatura ajustable (120°C-230°C), y sistema de seguridad automático.
+            </p>
+            
             <div class="products-grid">
                 <!-- Machine 1 - Press&Maiz Individual -->
                 <div class="product-card">
                     <div class="product-image">
                         <img src="/images/individual.png" alt="Press&Maiz Individual">
-                        <div class="product-badge">Startup</div>
+                        <div class="product-badge">1 Placa</div>
                     </div>
                     <div class="product-content">
                         <h3>Press&Maiz Individual</h3>
-                        <p>Ideal para emprendedores y pequeños negocios. Compacta, eficiente y fácil de operar.</p>
-                        <div class="product-price">Q8,500</div>
+                        <p>Perfecta para hogares y pequeños emprendimientos. Compacta y eficiente para producción diaria.</p>
+                        
+                        <div class="product-price">
+                            Q8,500
+                            <span>Precio de contado</span>
+                        </div>
+                        
+                        <div class="finance-badge">
+                            💳 12 cuotas de Q750
+                        </div>
+                        
                         <button class="btn btn-cart add-to-cart" data-id="1" data-name="Press&Maiz Individual" data-price="8500">
                             <i class="fas fa-cart-plus"></i> Agregar al Carrito
                         </button>
+                        
                         <ul class="product-features">
-                            <li>120-180 tortillas/hora</li>
-                            <li>Grosor ajustable 1-3mm</li>
-                            <li>Consumo: 1.5kW/h</li>
-                            <li>Garantía 12 meses</li>
-                            <li>Incluye placa estándar</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <!-- Machine 2 - Press&Maiz Doble -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="/images/lineup.png" alt="Press&Maiz Doble">
-                        <div class="product-badge">Más Vendido</div>
-                    </div>
-                    <div class="product-content">
-                        <h3>Press&Maiz Doble</h3>
-                        <p>Para restaurantes y tortillerías medianas. Doble productividad, misma calidad.</p>
-                        <div class="product-price">Q15,000</div>
-                        <button class="btn btn-cart add-to-cart" data-id="2" data-name="Press&Maiz Doble" data-price="15000">
-                            <i class="fas fa-cart-plus"></i> Agregar al Carrito
-                        </button>
-                        <ul class="product-features">
-                            <li>250-350 tortillas/hora</li>
-                            <li>Dos placas simultáneas</li>
-                            <li>Consumo: 2.8kW/h</li>
-                            <li>Garantía 18 meses</li>
-                            <li>Control digital</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <!-- Machine 3 - Press&Maiz Cuádruple -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="/images/lineup.png" alt="Press&Maiz Cuádruple">
-                        <div class="product-badge">Industrial</div>
-                    </div>
-                    <div class="product-content">
-                        <h3>Press&Maiz Cuádruple</h3>
-                        <p>Para producción a gran escala. Máxima eficiencia y automatización.</p>
-                        <div class="product-price">Q28,000</div>
-                        <button class="btn btn-cart add-to-cart" data-id="3" data-name="Press&Maiz Cuádruple" data-price="28000">
-                            <i class="fas fa-cart-plus"></i> Agregar al Carrito
-                        </button>
-                        <ul class="product-features">
-                            <li>500-700 tortillas/hora</li>
-                            <li>Cuatro placas simultáneas</li>
-                            <li>Consumo: 4.5kW/h</li>
-                            <li>Garantía 24 meses</li>
-                            <li>Sistema automatizado</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Accessories Section -->
-            <div style="margin-top: 60px;">
-                <h3 style="text-align: center; margin-bottom: 30px; color: var(--dark);">Accesorios y Placas</h3>
-                <div class="products-grid">
-                    <div class="product-card">
-                        <div class="product-content">
-                            <h3>Placa para Pupusas</h3>
-                            <p>Molde especial para pupusas formadas de 10cm.</p>
-                            <div class="product-price">Q1,200</div>
-                            <button class="btn add-to-cart" data-id="4" data-name="Placa para Pupusas" data-price="1200">
-                                <i class="fas fa-cart-plus"></i> Agregar
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="product-card">
-                        <div class="product-content">
-                            <h3>Placa para Sopes</h3>
-                            <p>Molde para sopes con bordes perfectos.</p>
-                            <div class="product-price
+                            <li><strong>1 placa</strong> de cocción</li>
+                            <li><strong>60-80 tortillas/hora</strong></li>
+                            <li>Calentamiento: <strong>3-5 minutos</strong></li>
+                            <li>Temperatura: <strong>120°C-230°C</strong></li>
+                            <li>Garantía: <strong>12 meses</strong></li>
+                            <li>Incl
