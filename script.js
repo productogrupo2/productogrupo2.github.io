@@ -83,9 +83,20 @@ function calculateSubtotal() {
 }
 
 // Calcular envío
-function calculateShipping() {
-    // Lógica básica: Q30 si no es Guatemala/Sacatepéquez
-    return 0; // Gratis por defecto para Guatemala/Sacatepéquez
+function calculateShipping(city = null) {
+    // Si se pasa una ciudad específica, usarla
+    if (city) {
+        return (city === 'guatemala' || city === 'sacatepequez') ? 0 : 30;
+    }
+    
+    // Si hay selección en el checkout, usarla
+    const citySelect = document.getElementById('customerCity');
+    if (citySelect && citySelect.value) {
+        return (citySelect.value === 'guatemala' || citySelect.value === 'sacatepequez') ? 0 : 30;
+    }
+    
+    // Default: gratis
+    return 0;
 }
 
 // Calcular total
