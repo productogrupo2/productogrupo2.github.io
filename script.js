@@ -114,6 +114,12 @@ function updateCartUI() {
     const shippingElem = document.getElementById('shipping');
     const totalElem = document.getElementById('total');
     
+    // ⭐⭐ VERIFICAR QUE LOS ELEMENTOS EXISTAN ⭐⭐
+    if (!cartCount || !cartItems || !emptyCart || !cartTotal || !cartActions || !subtotalElem || !shippingElem || !totalElem) {
+        console.error('❌ Error: No se encontraron elementos del carrito');
+        return;
+    }
+    
     // Actualizar contador
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
     cartCount.textContent = totalItems;
@@ -162,6 +168,7 @@ function updateCartUI() {
         totalElem.textContent = `Q${total.toFixed(2)}`;
     }
 }
+
 
 // ====================
 // MODAL DE CARRITO
@@ -352,6 +359,8 @@ function closeCheckoutModal() {
 async function processCheckout(e) {
     e.preventDefault();
     
+    console.log('🔄 Iniciando proceso de checkout...');
+    
     // Validar que haya productos
     if (cart.length === 0) {
         showNotification('error', 'Carrito vacío', 'Agrega productos antes de finalizar la compra');
@@ -359,14 +368,33 @@ async function processCheckout(e) {
     }
     
     // Recoger datos del formulario
+    const customerName = document.getElementById('customerName');
+    const customerEmail = document.getElementById('customerEmail');
+    const customerPhone = document.getElementById('customerPhone');
+    const customerAddress = document.getElementById('customerAddress');
+    const customerCity = document.getElementById('customerCity');
+    const customerNotes = document.getElementById('customerNotes');
+    
+    // Verificar que los elementos existan
+    if (!customerName || !customerEmail || !customerPhone || !customerAddress || !customerCity) {
+        showNotification('error', 'Error de formulario', 'No se pudo cargar el formulario. Recarga la página.');
+        return;
+    }
+    
+    const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked');
+    if (!paymentMethod) {
+        showNotification('error', 'Método de pago', 'Selecciona un método de pago');
+        return;
+    }
+    
     const formData = {
-        name: document.getElementById('customerName').value.trim(),
-        email: document.getElementById('customerEmail').value.trim(),
-        phone: document.getElementById('customerPhone').value.trim(),
-        address: document.getElementById('customerAddress').value.trim(),
-        city: document.getElementById('customerCity').value,
-        paymentMethod: document.querySelector('input[name="paymentMethod"]:checked').value,
-        notes: document.getElementById('customerNotes').value.trim(),
+        name: customerName.value.trim(),
+        email: customerEmail.value.trim(),
+        phone: customerPhone.value.trim(),
+        address: customerAddress.value.trim(),
+        city: customerCity.value,
+        paymentMethod: paymentMethod.value,
+        notes: customerNotes ? customerNotes.value.trim() : '',
         orderId: 'KC-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5).toUpperCase(),
         date: new Date().toLocaleDateString('es-GT', {
             weekday: 'long',
@@ -383,8 +411,8 @@ async function processCheckout(e) {
     };
     
     // Validación básica
-    if (!formData.name || !formData.email || !formData.phone || !formData.address || !formData.city || !formData.paymentMethod) {
-        showNotification('error', 'Datos incompletos', 'Por favor completa todos los campos requeridos');
+    if (!formData.name || !formData.email || !formData.phone || !formData.address || !formData.city) {
+        showNotification('error', 'Datos incompletos', 'Por favor completa todos los campos requeridos (*)');
         return;
     }
     
@@ -395,70 +423,94 @@ async function processCheckout(e) {
     submitBtn.disabled = true;
     
     try {
+        console.log('📧 Preparando email con datos:', formData);
+        
         // ╔══════════════════════════════════════════════════════════════╗
         // ║                 PARÁMETROS CORREGIDOS                        ║
-        // ║          (incluyendo destinatario obligatorio)               ║
         // ╚══════════════════════════════════════════════════════════════╝
         const templateParams = {
+            // Datos de la orden
             order_id: formData.orderId,
             date: formData.date,
+            subtotal: formData.subtotal,
+            shipping: formData.shipping,
+            order_total: formData.total,
+            order_items: formData.items,
+            
+            // Datos del cliente
             customer_name: formData.name,
             customer_email: formData.email,
             customer_phone: formData.phone,
             customer_address: formData.address,
             customer_city: formData.city,
             payment_method: formData.paymentMethod,
-            order_items: formData.items,
-            subtotal: formData.subtotal,
-            shipping: formData.shipping,
-            order_total: formData.total,
             customer_notes: formData.notes || 'Sin notas adicionales',
             year: new Date().getFullYear(),
             
-            // ⭐⭐ ESTOS CAMPOS SON OBLIGATORIOS PARA EMAILJS ⭐⭐
-            to_email: 'ventas@kitch-crafter.com',    // ← REEMPLAZA CON TU EMAIL
-            to_name: 'KITCH-CRAFTER Ventas',         // ← REEMPLAZA CON TU NOMBRE
+            // ⭐⭐ DESTINATARIO FIJO OBLIGATORIO ⭐⭐
+            // EmailJS necesita SABER a quién enviar
+            // ESTOS CAMPOS DEBEN COINCIDIR CON TU PLANTILLA EN EMAILJS
+            to_email: 'TU_EMAIL_AQUI@gmail.com',  // ⬅️⬅️⬅️ REEMPLAZA CON TU EMAIL
+            to_name: 'KITCH-CRAFTER Ventas',
             
-            // Campos adicionales útiles
-            reply_to: formData.email,                // Para responder al cliente
+            // Para poder responder al cliente
+            reply_to: formData.email,
             from_name: 'Sistema de Órdenes KITCH-CRAFTER'
         };
         
+        console.log('📤 Enviando email con parámetros:', templateParams);
+        
         // ╔══════════════════════════════════════════════════════════════╗
-        // ║                 DATOS DE EMAILJS                             ║
-        // ║       REEMPLAZA CON TUS DATOS REALES                        ║
+        // ║                 CONFIGURACIÓN EMAILJS                        ║
         // ╚══════════════════════════════════════════════════════════════╝
         const response = await emailjs.send(
-            'service_ikudrk5',      // ← Service ID de EmailJS
-            'template_fmbvd15',     // ← Template ID de EmailJS
+            'service_ikudrk5',      // ⬅️⬅️⬅️ Service ID de EmailJS
+            'template_fmbvd15',     // ⬅️⬅️⬅️ Template ID de EmailJS
             templateParams
         );
         
-        // Éxito
-        showNotification('success', '✅ Orden enviada', `Recibimos tu orden #${formData.orderId}. Te contactaremos pronto.`);
+        console.log('✅ Email enviado exitosamente:', response);
         
-        // Limpiar carrito
-        clearCart();
+        // ⭐⭐ IMPORTANTE: NO limpiar el carrito hasta confirmar éxito ⭐⭐
+        showNotification('success', '✅ Orden enviada', `Recibimos tu orden #${formData.orderId}`);
         
-        // Cerrar modales
+        // Cerrar modales primero
         closeCheckoutModal();
         closeCartModal();
         
-        // Mostrar confirmación final
+        // Luego limpiar el carrito (después de cerrar modales)
         setTimeout(() => {
-            alert(`¡Gracias por tu compra, ${formData.name}!\n\n📧 Recibimos tu orden y te contactaremos pronto.\n\nID de tu orden: ${formData.orderId}\nTotal: Q${formData.total}`);
+            clearCart();
         }, 500);
         
-    } catch (error) {
-        console.error('Error al enviar email:', error);
+        // Mostrar confirmación final
+        setTimeout(() => {
+            alert(`¡Gracias por tu compra, ${formData.name}!\n\n📧 Te contactaremos pronto al:\nEmail: ${formData.email}\nTeléfono: ${formData.phone}\n\nID de orden: ${formData.orderId}\nTotal: Q${formData.total}`);
+        }, 1000);
         
-        // Mensaje de error más específico
-        let errorMsg = 'Hubo un problema al enviar tu orden. ';
-        if (error.text && error.text.includes('recipients address')) {
-            errorMsg = 'Error de configuración: falta el destinatario del email. Por favor contacta al soporte.';
+    } catch (error) {
+        console.error('❌ ERROR COMPLETO:', {
+            status: error.status,
+            text: error.text,
+            message: error.message
+        });
+        
+        let errorMessage = 'Hubo un problema al enviar tu orden. ';
+        
+        // Mensajes específicos según el error
+        if (error.text) {
+            if (error.text.includes('recipients address')) {
+                errorMessage = 'Error de configuración: Por favor configura el destinatario en EmailJS Dashboard.';
+            } else if (error.text.includes('Invalid template')) {
+                errorMessage = 'Error: Template ID incorrecto. Verifica en EmailJS.';
+            } else if (error.text.includes('Service not found')) {
+                errorMessage = 'Error: Service ID incorrecto. Verifica en EmailJS.';
+            } else {
+                errorMessage += `Error: ${error.text}`;
+            }
         }
         
-        showNotification('error', '❌ Error', errorMsg);
+        showNotification('error', '❌ Error', errorMessage);
         submitBtn.textContent = originalText;
         submitBtn.disabled = false;
     }
